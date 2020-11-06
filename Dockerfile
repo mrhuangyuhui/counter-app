@@ -1,15 +1,15 @@
+# syntax=docker/dockerfile:experimental
 FROM node:12.16.1-alpine3.11 as builder 
 
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-
-RUN npm install
+WORKDIR /app
 
 COPY . .
 
-RUN npm run build 
+RUN --mount=type=cache,target=/app/node_modules \
+    --mount=type=cache,target=/root/.npm \
+    npm install \
+    && npm run build
 
 FROM nginx:1.16.1-alpine
 
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+COPY --from=builder /app/build /usr/share/nginx/html

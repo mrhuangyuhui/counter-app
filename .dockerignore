@@ -1,6 +1,6 @@
-.git
-node_modules
-build
 .dockerignore
 Dockerfile*
 docker-compose*.yml
+node_modules
+build
+.git
